@@ -14,6 +14,7 @@
 		led-failsafe = &led_power;
 		led-running = &led_power;
 		led-upgrade = &led_power;
+		label-mac-device = &ethernet;
 	};
 
 	leds {
@@ -103,12 +104,10 @@
 	status = "okay";
 };
 
-&pinctrl {
-	state_default: pinctrl0 {
-		gpio {
-			ralink,group = "i2c", "jtag", "uartf", "led";
-			ralink,function = "gpio";
-		};
+&state_default {
+	gpio {
+		groups = "i2c", "jtag", "uartf", "led";
+		function = "gpio";
 	};
 };
 

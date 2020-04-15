@@ -1,26 +1,28 @@
 #include "mt7628an.dtsi"
 
+#include <dt-bindings/gpio/gpio.h>
+
 / {
 	compatible = "vocore,vocore2", "mediatek,mt7628an-soc";
+
+	aliases {
+		label-mac-device = &wmac;
+	};
 
 	chosen {
 		bootargs = "console=ttyS2,115200";
 	};
 };
 
-
-&pinctrl {
-	state_default: pinctrl0 {
-		gpio {
-			ralink,group = "wled_an", "refclk", "wdt";
-			ralink,function = "gpio";
-		};
+&state_default {
+	gpio {
+		groups = "wled_an", "refclk", "wdt";
+		function = "gpio";
 	};
 };
 
 &wmac {
 	status = "okay";
-	ralink,mtd-eeprom = <&factory 0x4>;
 };
 
 &ethernet {

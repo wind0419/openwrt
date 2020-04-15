@@ -21,27 +21,27 @@
 	};
 
 	keys {
-		compatible = "gpio-keys-polled";
-		poll-interval = <20>;
+		compatible = "gpio-keys";
 
 		reset {
 			label = "reset";
-			gpios = <&gpio1 6 GPIO_ACTIVE_LOW>;
+			gpios = <&gpio 38 GPIO_ACTIVE_LOW>;
 			linux,code = <KEY_RESTART>;
 		};
 	};
+
 	/* LED used is dual-color,dual lead LED */
 	leds {
 		compatible = "gpio-leds";
 
 		led_power_green: power {
 			label = "tl-wr840n-v5:green:power";
-			gpios = <&gpio1 9 GPIO_ACTIVE_LOW>;
+			gpios = <&gpio 41 GPIO_ACTIVE_LOW>;
 		};
 
 		orange {
 			label = "tl-wr840n-v5:orange:power";
-			gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
+			gpios = <&gpio 43 GPIO_ACTIVE_LOW>;
 		};
 	};
 };
@@ -91,19 +91,19 @@
 &wmac {
 	status = "okay";
 	mtd-mac-address = <&factory 0xf100>;
-	mediatek,mtd-eeprom = <&factory 0x0>;
 };
 
 &ethernet {
 	mtd-mac-address = <&factory 0xf100>;
-	mediatek,portmap = "wllll";
 };
 
-&pinctrl {
-	state_default: pinctrl0 {
-		gpio {
-			ralink,group = "p0led_an", "p2led_an", "perst";
-			ralink,function = "gpio";
-		};
+&esw {
+	mediatek,portmap = <0x3e>;
+};
+
+&state_default {
+	gpio {
+		groups = "p0led_an", "p2led_an", "perst";
+		function = "gpio";
 	};
 };

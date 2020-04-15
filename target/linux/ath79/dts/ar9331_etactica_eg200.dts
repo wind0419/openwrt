@@ -18,8 +18,7 @@
 	};
 
 	keys {
-		compatible = "gpio-keys-polled";
-		poll-interval = <50>;
+		compatible = "gpio-keys";
 
 		restore {
 			linux,code = <KEY_RESTART>;
@@ -128,5 +127,4 @@
 &wmac {
 	status = "okay";
 	mtd-cal-data = <&art 0x1000>;
-	mtd-mac-address = <&art 0x1002>;
 };

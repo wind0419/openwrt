@@ -7,30 +7,31 @@
 
 / {
 	compatible = "zbtlink,zbt-we1326", "mediatek,mt7621-soc";
-	model = "ZBT-WE1326";
+	model = "Zbtlink ZBT-WE1326";
+
+	aliases {
+		label-mac-device = &wifi1;
+	};
 
 	chosen {
 		bootargs = "console=ttyS0,115200";
 	};
 
 	keys {
-		compatible = "gpio-keys-polled";
-		poll-interval = <20>;
+		compatible = "gpio-keys";
 
 		reset {
 			label = "reset";
-			gpios = <&gpio0 18 GPIO_ACTIVE_LOW>;
+			gpios = <&gpio 18 GPIO_ACTIVE_LOW>;
 			linux,code = <KEY_RESTART>;
 		};
 	};
 };
 
-&pinctrl {
-	state_default: pinctrl0 {
-		gpio {
-			ralink,group = "wdt";
-			ralink,function = "gpio";
-		};
+&state_default {
+	gpio {
+		groups = "wdt";
+		function = "gpio";
 	};
 };
 
@@ -74,8 +75,38 @@
 	};
 };
 
-&ethernet {
+&gmac0 {
 	mtd-mac-address = <&factory 0xe000>;
+};
+
+&switch0 {
+	ports {
+		port@0 {
+			status = "okay";
+			label = "lan1";
+		};
+
+		port@1 {
+			status = "okay";
+			label = "lan2";
+		};
+
+		port@2 {
+			status = "okay";
+			label = "lan3";
+		};
+
+		port@3 {
+			status = "okay";
+			label = "lan4";
+		};
+
+		port@4 {
+			status = "okay";
+			label = "wan";
+			mtd-mac-address = <&factory 0xe006>;
+		};
+	};
 };
 
 &pcie {
@@ -83,7 +114,7 @@
 };
 
 &pcie0 {
-	mt76@0,0 {
+	wifi0: mt76@0,0 {
 		reg = <0x0000 0 0 0 0>;
 		mediatek,mtd-eeprom = <&factory 0x8000>;
 		ieee80211-freq-limit = <5000000 6000000>;
@@ -91,7 +122,7 @@
 };
 
 &pcie1 {
-	mt76@0,0 {
+	wifi1: mt76@0,0 {
 		reg = <0x0000 0 0 0 0>;
 		mediatek,mtd-eeprom = <&factory 0x0000>;
 		ieee80211-freq-limit = <2400000 2500000>;

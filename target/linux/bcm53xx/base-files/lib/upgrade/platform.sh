@@ -1,4 +1,4 @@
-RAMFS_COPY_BIN='osafeloader oseama otrx'
+RAMFS_COPY_BIN='osafeloader oseama otrx truncate'
 
 PART_NAME=firmware
 
@@ -39,7 +39,7 @@ platform_expected_image() {
 		"luxul,xap-1610-v1")	echo "lxl XAP-1610"; return;;
 		"luxul,xbr-4500-v1")	echo "lxl XBR-4500"; return;;
 		"luxul,xwc-1000")	echo "lxl XWC-1000"; return;;
-		"luxul,xwc-2000")	echo "lxl XWC-2000"; return;;
+		"luxul,xwc-2000-v1")	echo "lxl XWC-2000"; return;;
 		"luxul,xwr-1200v1")	echo "lxl XWR-1200"; return;;
 		"luxul,xwr-3100v1")	echo "lxl XWR-3100"; return;;
 		"luxul,xwr-3150-v1")	echo "lxl XWR-3150"; return;;
@@ -281,7 +281,7 @@ platform_do_upgrade_nand_trx() {
 	while [ "$(dd if=$dir/root skip=$ubi_length bs=1 count=4 2>/dev/null)" = "UBI#" ]; do
 		ubi_length=$(($ubi_length + 131072))
 	done
-	dd if=$dir/root of=/tmp/root.ubi bs=131072 count=$((ubi_length / 131072)) 2>/dev/null
+	truncate -s $ubi_length $dir/root
 	[ $? -ne 0 ] && {
 		echo "Failed to prepare new UBI image."
 		return
@@ -289,7 +289,7 @@ platform_do_upgrade_nand_trx() {
 
 	# Flash
 	mtd write /tmp/kernel.trx firmware || exit 1
-	nand_do_upgrade /tmp/root.ubi
+	nand_do_upgrade $dir/root
 }
 
 platform_do_upgrade_nand_seama() {
@@ -402,6 +402,8 @@ platform_do_upgrade() {
 		case "$file_type" in
 			"chk")		platform_do_upgrade_nand_trx "$1" $((0x$(get_magic_long_at "$1" 4)));;
 			"cybertan")	platform_do_upgrade_nand_trx "$1" 32;;
+			"lxl")		platform_do_upgrade_nand_trx "$1" $(get_le_long_at "$1" 8);;
+			"lxlold")	platform_do_upgrade_nand_trx "$1" 64;;
 			"seama")	platform_do_upgrade_nand_seama "$1";;
 			"trx")		platform_do_upgrade_nand_trx "$1";;
 		esac

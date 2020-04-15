@@ -11,11 +11,11 @@
 		led-failsafe = &led_power;
 		led-running = &led_power;
 		led-upgrade = &led_power;
+		label-mac-device = &ethernet;
 	};
 
 	keys {
-		compatible = "gpio-keys-polled";
-		poll-interval = <20>;
+		compatible = "gpio-keys";
 
 		reset {
 			label = "reset";
@@ -51,11 +51,9 @@
 	ralink,mtd-eeprom = <&factory 0>;
 };
 
-&pinctrl {
-	state_default: pinctrl0 {
-		default {
-			ralink,group = "ephy", "wled", "pa", "i2c", "wdt", "uartf";
-			ralink,function = "gpio";
-		};
+&state_default {
+	default {
+		groups = "ephy", "wled", "pa", "i2c", "wdt", "uartf";
+		function = "gpio";
 	};
 };

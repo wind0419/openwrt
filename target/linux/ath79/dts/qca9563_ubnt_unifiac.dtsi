@@ -29,7 +29,6 @@
 			label = "ubnt:blue:dome";
 			gpios = <&gpio 8 GPIO_ACTIVE_HIGH>;
 		};
-
 	};
 
 	keys {
@@ -105,8 +104,8 @@
 				read-only;
 			};
 
-			eeprom: partition@ff0000 {
-				label = "EEPROM";
+			art: partition@ff0000 {
+				label = "art";
 				reg = <0xff0000 0x010000>;
 				read-only;
 			};
@@ -116,6 +115,6 @@
 
 &wmac {
 	status = "okay";
-	mtd-cal-data = <&eeprom 0x1000>;
-	mtd-mac-address = <&eeprom 0x0>;
+
+	mtd-cal-data = <&art 0x1000>;
 };
