@@ -1,10 +1,8 @@
+# SPDX-License-Identifier: GPL-2.0-only
 #
 # Copyright (C) 2013-2016 OpenWrt.org
 # Copyright (C) 2016 Yousong Zhou
-#
-# This is free software, licensed under the GNU General Public License v2.
-# See /LICENSE for more information.
-#
+
 include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/image.mk
 
@@ -37,21 +35,10 @@ define Device/Default
   KERNEL := kernel-bin | uImage none
   IMAGES := sdcard.img.gz
   IMAGE/sdcard.img.gz := sunxi-sdcard | append-metadata | gzip
-  SUPPORTED_DEVICES := $(subst _,$(comma),$(1))
   SUNXI_DTS_DIR :=
   SUNXI_DTS = $$(SUNXI_DTS_DIR)$$(SOC)-$(lastword $(subst _, ,$(1)))
 endef
 
-ifeq ($(SUBTARGET),cortexa7)
-include cortex-a7.mk
-endif
-
-ifeq ($(SUBTARGET),cortexa8)
-include cortex-a8.mk
-endif
-
-ifeq ($(SUBTARGET),cortexa53)
-include cortex-a53.mk
-endif
+include $(SUBTARGET).mk
 
 $(eval $(call BuildImage))

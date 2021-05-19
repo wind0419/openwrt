@@ -1,5 +1,3 @@
-/dts-v1/;
-
 #include "bcm6348.dtsi"
 
 #include <dt-bindings/input/input.h>
@@ -7,6 +5,13 @@
 / {
 	model = "D-Link DSL-2640B rev B2";
 	compatible = "d-link,dsl-2640b-b", "brcm,bcm6348";
+
+	aliases {
+		led-boot = &led_power_green;
+		led-failsafe = &led_power_green;
+		led-running = &led_power_green;
+		led-upgrade = &led_power_green;
+	};
 
 	chosen {
 		bootargs = "rootfstype=squashfs,jffs2 noinitrd console=ttyS0,115200";
@@ -30,28 +35,28 @@
 	leds {
 		compatible = "gpio-leds";
 
-		power_green {
-			label = "D-4P-W:green:power";
+		led_power_green: power_green {
+			label = "green:power";
 			gpios = <&pinctrl 0 1>;
 			default-state = "on";
 		};
 		status {
-			label = "D-4P-W::status";
+			label = "status";
 			gpios = <&pinctrl 3 1>;
 		};
 		inet_green {
-			label = "D-4P-W:green:internet";
+			label = "green:internet";
 			gpios = <&pinctrl 4 1>;
 		};
 		inet_red {
-			label = "D-4P-W:red:internet";
+			label = "red:internet";
 			gpios = <&pinctrl 5 1>;
 		};
 	};
 };
 
 &pflash {
-	status = "ok";
+	status = "okay";
 
 	partitions {
 		compatible = "fixed-partitions";
@@ -83,5 +88,5 @@
 };
 
 &uart0 {
-	status = "ok";
+	status = "okay";
 };

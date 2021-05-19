@@ -42,9 +42,14 @@ dnsmasq_ignore_opt() {
 		bootp-*|\
 		pxe-*)
 			[ -z "$dnsmasq_has_dhcp" ] ;;
-		dnssec-*|\
+		dnssec*|\
 		trust-anchor)
-			[ -z "$dnsmasq_has_dnssec" ] ;;
+			if [ -z "$dnsmasq_has_dnssec" ]; then
+				echo "dnsmasq: \"$opt\" requested, but dnssec support is not available" >&2
+				exit 1
+			fi
+			return 1
+			;;
 		tftp-*)
 			[ -z "$dnsmasq_has_tftp" ] ;;
 		ipset)
@@ -102,18 +107,13 @@ dhcp_check() {
 
 	[ -s "$stamp" ] && return $(cat "$stamp")
 
-	# If there's no carrier yet, skip this interface.
+	# If interface is down, skip it.
 	# The init script will be called again once the link is up
-	case "$(devstatus "$ifname" | jsonfilter -e @.carrier)" in
+	case "$(devstatus "$ifname" | jsonfilter -e @.up)" in
 		false) return 1;;
 	esac
 
 	udhcpc -n -q -s /bin/true -t 1 -i "$ifname" >&- && rv=1 || rv=0
-
-	[ $rv -eq 1 ] && \
-		logger -t dnsmasq \
-			"found already running DHCP-server on interface '$ifname'" \
-			"refusing to start, use 'option force 1' to override"
 
 	echo $rv > "$stamp"
 	return $rv
@@ -517,7 +517,12 @@ dhcp_add() {
 
 	#check for an already active dhcp server on the interface, unless 'force' is set
 	config_get_bool force "$cfg" force 0
-	[ $force -gt 0 ] || dhcp_check "$ifname" || return 0
+	[ $force -gt 0 ] || dhcp_check "$ifname" || {
+		logger -t dnsmasq \
+			"found already running DHCP-server on interface '$ifname'" \
+			"refusing to start, use 'option force 1' to override"
+		return 0
+	}
 
 	config_get start "$cfg" start 100
 	config_get limit "$cfg" limit 150
@@ -764,6 +769,29 @@ dhcp_relay_add() {
 	fi
 }
 
+dnsmasq_ipset_add() {
+	local cfg="$1"
+	local ipsets domains
+
+	add_ipset() {
+		ipsets="${ipsets:+$ipsets,}$1"
+	}
+
+	add_domain() {
+		# leading '/' is expected
+		domains="$domains/$1"
+	}
+
+	config_list_foreach "$cfg" "name" add_ipset
+	config_list_foreach "$cfg" "domain" add_domain
+
+	if [ -z "$ipsets" ] || [ -z "$domains" ]; then
+		return 0
+	fi
+
+	xappend "--ipset=$domains/$ipsets"
+}
+
 dnsmasq_start()
 {
 	local cfg="$1"
@@ -900,6 +928,7 @@ dnsmasq_start()
 	append_parm "$cfg" "min_cache_ttl" "--min-cache-ttl"
 	append_parm "$cfg" "max_cache_ttl" "--max-cache-ttl"
 	append_parm "$cfg" "pxe_prompt" "--pxe-prompt"
+	append_parm "$cfg" "tftp_unique_root" "--tftp-unique-root"
 	config_list_foreach "$cfg" "pxe_service" append_pxe_service
 	config_get DOMAIN "$cfg" domain
 
@@ -983,7 +1012,12 @@ dnsmasq_start()
 
 	xappend "--dhcp-broadcast=tag:needs-broadcast"
 
-	xappend "--addn-hosts=$(dirname $HOSTFILE)"
+	config_get_bool ignore_hosts_dir "$cfg" ignore_hosts_dir 0
+	if [ "$ignore_hosts_dir" = "1" ]; then
+		xappend "--addn-hosts=$HOSTFILE"
+	else
+		xappend "--addn-hosts=$(dirname $HOSTFILE)"
+	fi
 
 	config_get dnsmasqconfdir "$cfg" confdir "/tmp/dnsmasq.d"
 	xappend "--conf-dir=$dnsmasqconfdir"
@@ -1051,6 +1085,10 @@ dnsmasq_start()
 	echo >> $CONFIGFILE_TMP
 
 	echo >> $CONFIGFILE_TMP
+	config_foreach filter_dnsmasq ipset dnsmasq_ipset_add "$cfg"
+	echo >> $CONFIGFILE_TMP
+
+	echo >> $CONFIGFILE_TMP
 	mv -f $CONFIGFILE_TMP $CONFIGFILE
 	mv -f $HOSTFILE_TMP $HOSTFILE
 
@@ -1060,6 +1098,7 @@ dnsmasq_start()
 			echo "search $DOMAIN" >> /tmp/resolv.conf
 		}
 		DNS_SERVERS="$DNS_SERVERS 127.0.0.1"
+		[ -e /proc/sys/net/ipv6 ] && DNS_SERVERS="$DNS_SERVERS ::1"
 		for DNS_SERVER in $DNS_SERVERS ; do
 			echo "nameserver $DNS_SERVER" >> /tmp/resolv.conf
 		done

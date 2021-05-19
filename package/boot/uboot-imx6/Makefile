@@ -7,10 +7,10 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_VERSION:=2020.01
+PKG_VERSION:=2020.04
 PKG_RELEASE:=1
 
-PKG_HASH:=aa453c603208b1b27bd03525775a7f79b443adec577fdc6e8f06974025a135f1
+PKG_HASH:=fe732aaf037d9cc3c0909bad8362af366ae964bbdac6913a34081ff4ad565372
 
 include $(INCLUDE_DIR)/u-boot.mk
 include $(INCLUDE_DIR)/package.mk
@@ -24,42 +24,15 @@ define U-Boot/apalis_imx6
   NAME:=Toradex Apalis
   UBOOT_IMAGE:=SPL u-boot.img u-boot-with-spl.imx
   UBOOT_MAKE_FLAGS:=SPL u-boot.img u-boot-with-spl.imx
+  BUILD_DEVICES:=apalis
 endef
 
 define U-Boot/mx6cuboxi
-   NAME:=SolidRun Cubox-i boards
-   UBOOT_IMAGE:=SPL u-boot.img
-   UBOOT_MAKE_FLAGS:=SPL u-boot.img
-   BUILD_DEVICES:=cubox-i
-   HIDDEN:=1
-endef
-
-define U-Boot/mx6sabresd
-  NAME:=SABRE i.MX6Quad board
-endef
-
-define U-Boot/nitrogen6dl
-  NAME:=Nitrogen6x i.MX6Dual-Lite 1GB board
-endef
-
-define U-Boot/nitrogen6dl2g
-  NAME:=Nitrogen6x i.MX6Dual-Lite 2GB board
-endef
-
-define U-Boot/nitrogen6q
-  NAME:=Nitrogen6x/SABRE Lite (MX6Q/1GB)
-endef
-
-define U-Boot/nitrogen6q2g
-  NAME:=Nitrogen6x i.MX6Quad 2GB board
-endef
-
-define U-Boot/nitrogen6s
-  NAME:=Nitrogen6x i.MX6Solo 512MB board
-endef
-
-define U-Boot/nitrogen6s1g
-  NAME:=Nitrogen6x i.MX6Solo 1GB board
+  NAME:=SolidRun Cubox-i boards
+  UBOOT_IMAGE:=SPL u-boot.img
+  UBOOT_MAKE_FLAGS:=SPL u-boot.img
+  BUILD_DEVICES:=cubox-i
+  HIDDEN:=1
 endef
 
 define U-Boot/wandboard
@@ -70,13 +43,6 @@ endef
 UBOOT_TARGETS := \
 	apalis_imx6 \
 	mx6cuboxi \
-	mx6sabresd \
-	nitrogen6dl \
-	nitrogen6dl2g \
-	nitrogen6q \
-	nitrogen6q2g \
-	nitrogen6s \
-	nitrogen6s1g \
 	wandboard
 
 UBOOT_MAKE_FLAGS += u-boot.imx

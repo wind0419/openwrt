@@ -30,13 +30,5 @@
 };
 
 &wmac {
-	ralink,mtd-eeprom = <&factory 0>;
-};
-
-&ehci {
-	status = "okay";
-};
-
-&ohci {
-	status = "okay";
+	ralink,mtd-eeprom = <&factory 0x0>;
 };

@@ -1,5 +1,3 @@
-/dts-v1/;
-
 #include "bcm6328.dtsi"
 
 #include <dt-bindings/input/input.h>
@@ -7,6 +5,13 @@
 / {
 	model = "Sercomm AD1018 (SPI flash mod)";
 	compatible = "sercomm,ad1018-nor", "brcm,bcm6328";
+
+	aliases {
+		led-boot = &led_power_green;
+		led-failsafe = &led_power_green;
+		led-running = &led_power_green;
+		led-upgrade = &led_power_green;
+	};
 
 	chosen {
 		bootargs = "rootfstype=squashfs,jffs2 noinitrd console=ttyS0,115200";
@@ -50,7 +55,7 @@
 };
 
 &leds {
-	status = "ok";
+	status = "okay";
 
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_leds &pinctrl_serial_led
@@ -64,56 +69,56 @@
 	inet_red@0 {
 		reg = <0>;
 		active-low;
-		label = "AD1018:red:internet";
+		label = "red:internet";
 	};
 
 	inet_green@1 {
 		reg = <1>;
 		active-low;
-		label = "AD1018:green:internet";
+		label = "green:internet";
 	};
 
-	power_green@8 {
+	led_power_green: power_green@8 {
 		reg = <8>;
 		active-low;
-		label = "AD1018:green:power";
+		label = "green:power";
 		default-state = "on";
 	};
 
 	adsl_green@10 {
 		reg = <10>;
 		active-low;
-		label = "AD1018:green:adsl";
+		label = "green:adsl";
 	};
 
 	adsl_red@11 {
 		reg = <11>;
 		active-low;
-		label = "AD1018:red:adsl";
+		label = "red:adsl";
 	};
 
 	phone_green@12 {
 		reg = <12>;
 		active-low;
-		label = "AD1018:green:phone";
+		label = "green:phone";
 	};
 
 	wps_green@13 {
 		reg = <13>;
 		active-low;
-		label = "AD1018:green:wps";
+		label = "green:wps";
 	};
 
 	wifi_green@14 {
 		reg = <14>;
 		active-low;
-		label = "AD1018:green:wifi";
+		label = "green:wifi";
 	};
 
 	usb_green@15 {
 		reg = <15>;
 		active-low;
-		label = "AD1018:green:usb";
+		label = "green:usb";
 	};
 
 	ephy0_spd@17 {
@@ -123,7 +128,7 @@
 };
 
 &hsspi {
-	status = "ok";
+	status = "okay";
 
 	flash@0 {
 		compatible = "jedec,spi-nor";
@@ -141,6 +146,30 @@
 	};
 };
 
+&nflash {
+	status = "okay";
+
+	nandcs@0 {
+		compatible = "brcm,nandcs";
+		reg = <0>;
+		nand-ecc-step-size = <512>;
+		nand-ecc-strength = <15>;
+		nand-on-flash-bbt;
+		brcm,nand-oob-sector-size = <64>;
+
+		partitions {
+			compatible = "fixed-partitions";
+			#address-cells = <1>;
+			#size-cells = <1>;
+
+			partition@0 {
+				label = "storage";
+				reg = <0 0>; /* autodetected size */
+			};
+		};
+	};
+};
+
 &uart0 {
-	status = "ok";
+	status = "okay";
 };

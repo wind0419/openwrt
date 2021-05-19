@@ -1,5 +1,3 @@
-/dts-v1/;
-
 #include "bcm6348.dtsi"
 
 #include <dt-bindings/input/input.h>
@@ -7,6 +5,13 @@
 / {
 	model = "Comtrend CT-536+/CT-5621T";
 	compatible = "comtrend,ct-536plus", "brcm,bcm6348";
+
+	aliases {
+		led-boot = &led_power_green;
+		led-failsafe = &led_power_green;
+		led-running = &led_power_green;
+		led-upgrade = &led_power_green;
+	};
 
 	chosen {
 		bootargs = "rootfstype=squashfs,jffs2 noinitrd console=ttyS0,115200";
@@ -30,20 +35,20 @@
 	leds {
 		compatible = "gpio-leds";
 
-		power_green {
-			label = "CT536_CT5621:green:power";
+		led_power_green: power_green {
+			label = "green:power";
 			gpios = <&pinctrl 0 1>;
 			default-state = "on";
 		};
 		adsl_fail_green {
-			label = "CT536_CT5621:green:adsl-fail";
+			label = "green:adsl-fail";
 			gpios = <&pinctrl 2 1>;
 		};
 	};
 };
 
 &pflash {
-	status = "ok";
+	status = "okay";
 
 	partitions {
 		compatible = "fixed-partitions";
@@ -75,5 +80,5 @@
 };
 
 &uart0 {
-	status = "ok";
+	status = "okay";
 };

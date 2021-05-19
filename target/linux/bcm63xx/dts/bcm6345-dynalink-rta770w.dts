@@ -1,5 +1,3 @@
-/dts-v1/;
-
 #include "bcm6345.dtsi"
 
 #include <dt-bindings/input/input.h>
@@ -7,6 +5,13 @@
 / {
 	model = "Dynalink RTA770W";
 	compatible = "dynalink,rta770w", "brcm,bcm6345";
+
+	aliases {
+		led-boot = &led_diag;
+		led-failsafe = &led_diag;
+		led-running = &led_diag;
+		led-upgrade = &led_diag;
+	};
 
 	chosen {
 		bootargs = "rootfstype=squashfs,jffs2 noinitrd console=ttyS0,115200";
@@ -31,29 +36,29 @@
 		compatible = "gpio-leds";
 
 		usb {
-			label = "RTA770W:green:usb";
+			label = "green:usb";
 			gpios = <&gpio0 7 1>;
 		};
 
 		adsl {
-			label = "RTA770W:green:adsl";
+			label = "green:adsl";
 			gpios = <&gpio0 8 0>;
 		};
 
-		diag {
-			label = "RTA770W:green:diag";
+		led_diag: diag {
+			label = "green:diag";
 			gpios = <&gpio0 10 1>;
 		};
 
 		wlan {
-			label = "RTA770W:green:wlan";
+			label = "green:wlan";
 			gpios = <&gpio0 11 1>;
 		};
 	};
 };
 
 &pflash {
-	status = "ok";
+	status = "okay";
 
 	partitions {
 		compatible = "fixed-partitions";
@@ -80,5 +85,5 @@
 };
 
 &uart0 {
-	status = "ok";
+	status = "okay";
 };

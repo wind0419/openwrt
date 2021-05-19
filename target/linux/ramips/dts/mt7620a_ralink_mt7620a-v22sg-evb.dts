@@ -1,5 +1,3 @@
-/dts-v1/;
-
 #include "mt7620a.dtsi"
 
 #include <dt-bindings/gpio/gpio.h>
@@ -68,9 +66,9 @@
 };
 
 &ethernet {
-	status = "okay";
 	pinctrl-names = "default";
 	pinctrl-0 = <&rgmii1_pins &rgmii2_pins &mdio_pins>;
+
 	mediatek,portmap = "llllw";
 
 	port@4 {

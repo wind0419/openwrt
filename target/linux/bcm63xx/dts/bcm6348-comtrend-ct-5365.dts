@@ -1,5 +1,3 @@
-/dts-v1/;
-
 #include "bcm6348.dtsi"
 
 #include <dt-bindings/input/input.h>
@@ -45,23 +43,23 @@
 		compatible = "gpio-leds";
 
 		power_green {
-			label = "96348A-122:green:power";
+			label = "green:power";
 			gpios = <&pinctrl 0 1>;
 			default-state = "on";
 		};
 		alarm_red {
-			label = "96348A-122:red:alarm";
+			label = "red:alarm";
 			gpios = <&pinctrl 2 1>;
 		};
 		wps_green {
-			label = "96348A-122:green:wps";
+			label = "green:wps";
 			gpios = <&pinctrl 6 1>;
 		};
 	};
 };
 
 &pflash {
-	status = "ok";
+	status = "okay";
 
 	partitions {
 		compatible = "fixed-partitions";
@@ -93,5 +91,5 @@
 };
 
 &uart0 {
-	status = "ok";
+	status = "okay";
 };

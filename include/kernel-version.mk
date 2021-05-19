@@ -1,18 +1,16 @@
-# Use the default kernel version if the Makefile doesn't override it
 
+# Use the default kernel version if the Makefile doesn't override it
 LINUX_RELEASE?=1
 
 ifdef CONFIG_TESTING_KERNEL
   KERNEL_PATCHVER:=$(KERNEL_TESTING_PATCHVER)
 endif
 
-LINUX_VERSION-4.14 = .172
-LINUX_VERSION-4.19 = .108
-LINUX_VERSION-5.4 = .32
+LINUX_VERSION-5.4 = .117
+LINUX_VERSION-5.10 = .37
 
-LINUX_KERNEL_HASH-4.14.172 = 2318a1ab937580a079351ed20557c336a3d95b664f667b14e3ba49e3271b217a
-LINUX_KERNEL_HASH-4.19.108 = 09aeeca5b08efea2f54b977b2999afb60d42f93b9f65b2b0111969f183f750a3
-LINUX_KERNEL_HASH-5.4.32 = 192d99fab7a47a537493b6d7eddb52892b98f8ada655c0bbb419b360a995f2b3
+LINUX_KERNEL_HASH-5.4.117 = 4e989b5775830092e5c76b5cca65ebff862ad0c87d0b58c3a20d415c3d4ec770
+LINUX_KERNEL_HASH-5.10.37 = a8d5e3309dafc484eb70f94747a6efffa29a79bae651ae126333e913c00be077
 
 remove_uri_prefix=$(subst git://,,$(subst http://,,$(subst https://,,$(1))))
 sanitize_uri=$(call qstrip,$(subst @,_,$(subst :,_,$(subst .,_,$(subst -,_,$(subst /,_,$(1)))))))

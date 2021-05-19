@@ -1,5 +1,3 @@
-/dts-v1/;
-
 #include "mt7628an.dtsi"
 
 #include <dt-bindings/gpio/gpio.h>
@@ -25,18 +23,18 @@
 		compatible = "gpio-leds";
 
 		led_power: power {
-			label = "gl-mt300n-v2:green:power";
+			label = "green:power";
 			default-state = "on";
 			gpios = <&gpio 42 GPIO_ACTIVE_LOW>;
 		};
 
 		wan {
-			label = "gl-mt300n-v2:green:wan";
+			label = "green:wan";
 			gpios = <&gpio 43 GPIO_ACTIVE_LOW>;
 		};
 
 		wlan {
-			label = "gl-mt300n-v2:red:wlan";
+			label = "red:wlan";
 			gpios = <&gpio 44 GPIO_ACTIVE_LOW>;
 		};
 	};
@@ -93,7 +91,7 @@
 &spi0 {
 	status = "okay";
 
-	m25p80@0 {
+	flash@0 {
 		compatible = "jedec,spi-nor";
 		reg = <0>;
 		spi-max-frequency = <10000000>;
@@ -131,13 +129,5 @@
 };
 
 &uart1 {
-	status = "okay";
-};
-
-&ehci {
-	status = "okay";
-};
-
-&ohci {
 	status = "okay";
 };

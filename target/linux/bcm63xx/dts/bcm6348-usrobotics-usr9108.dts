@@ -1,5 +1,3 @@
-/dts-v1/;
-
 #include "bcm6348.dtsi"
 
 #include <dt-bindings/input/input.h>
@@ -17,18 +15,18 @@
 		compatible = "gpio-leds";
 
 		usb {
-			label = "96348GW-A::usb";
+			label = "usb";
 			gpios = <&pinctrl 0 1>;
 		};
 		dsl {
-			label = "96348GW-A::adsl";
+			label = "adsl";
 			gpios = <&pinctrl 3 1>;
 		};
 	};
 };
 
 &pflash {
-	status = "ok";
+	status = "okay";
 
 	partitions {
 		compatible = "fixed-partitions";
@@ -60,5 +58,5 @@
 };
 
 &uart0 {
-	status = "ok";
+	status = "okay";
 };

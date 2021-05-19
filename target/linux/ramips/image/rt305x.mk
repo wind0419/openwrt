@@ -2,13 +2,13 @@
 # RT305X Profiles
 #
 define Build/buffalo-tftp-header
-  ( \
-    echo -n -e "# Airstation FirmWare\nrun u_fw\nreset\n\n" | \
-      dd bs=512 count=1 conv=sync; \
-    dd if=$@; \
-  ) > $@.tmp && \
-  $(STAGING_DIR_HOST)/bin/buffalo-tftp -i $@.tmp -o $@.new
-  mv $@.new $@
+	( \
+		echo -n -e "# Airstation FirmWare\nrun u_fw\nreset\n\n" | \
+			dd bs=512 count=1 conv=sync; \
+		dd if=$@; \
+	) > $@.tmp && \
+	$(STAGING_DIR_HOST)/bin/buffalo-tftp -i $@.tmp -o $@.new
+	mv $@.new $@
 endef
 
 define Build/dap-header
@@ -298,7 +298,6 @@ define Device/belkin_f7c027
   IMAGE_SIZE := 7616k
   DEVICE_VENDOR := Belkin
   DEVICE_MODEL := F7C027
-  DEVICE_PACKAGES := --kmod-usb-dwc2 -kmod-usb-ledtrig-usbport
   SUPPORTED_DEVICES += f7c027
 endef
 TARGET_DEVICES += belkin_f7c027
@@ -310,8 +309,7 @@ define Device/buffalo_whr-g300n
   DEVICE_VENDOR := Buffalo
   DEVICE_MODEL := WHR-G300N
   IMAGES += tftp.bin
-  IMAGE/tftp.bin := $$(sysupgrade_bin) | check-size | \
-	buffalo-tftp-header
+  IMAGE/tftp.bin := $$(sysupgrade_bin) | check-size | buffalo-tftp-header
   SUPPORTED_DEVICES += whr-g300n
   DEFAULT := n
 endef
@@ -415,7 +413,6 @@ define Device/dlink_dir-610-a1
   DEVICE_VENDOR := D-Link
   DEVICE_MODEL := DIR-610
   DEVICE_VARIANT := A1
-  DEVICE_PACKAGES := kmod-ledtrig-netdev kmod-ledtrig-timer
   SUPPORTED_DEVICES += dir-610-a1
   DEFAULT := n
 endef
@@ -475,8 +472,8 @@ define Device/dlink_dwr-512-b
   DEVICE_VENDOR := D-Link
   DEVICE_MODEL := DWR-512
   DEVICE_VARIANT := B
-  DEVICE_PACKAGES := jboot-tools kmod-usb2 kmod-spi-dev kmod-usb-serial \
-	kmod-usb-serial-option kmod-usb-net kmod-usb-net-cdc-ether comgt-ncm
+  DEVICE_PACKAGES := jboot-tools kmod-usb2 kmod-spi-dev \
+	kmod-usb-serial-option kmod-usb-net-cdc-ether comgt-ncm
   DLINK_ROM_ID := DLK6E2412001
   DLINK_FAMILY_MEMBER := 0x6E24
   DLINK_FIRMWARE_SIZE := 0x7E0000
@@ -556,7 +553,7 @@ define Device/hame_mpr-a1
   DEVICE_VENDOR := HAME
   DEVICE_MODEL := MPR
   DEVICE_VARIANT := A1
-  DEVICE_PACKAGES := kmod-usb-ohci kmod-usb2 kmod-ledtrig-netdev
+  DEVICE_PACKAGES := kmod-usb-ohci kmod-usb2
   SUPPORTED_DEVICES += mpr-a1
   DEFAULT := n
 endef
@@ -569,7 +566,7 @@ define Device/hame_mpr-a2
   DEVICE_VENDOR := HAME
   DEVICE_MODEL := MPR
   DEVICE_VARIANT := A2
-  DEVICE_PACKAGES := kmod-usb-ohci kmod-usb2 kmod-ledtrig-netdev
+  DEVICE_PACKAGES := kmod-usb-ohci kmod-usb2
   SUPPORTED_DEVICES += mpr-a2
 endef
 TARGET_DEVICES += hame_mpr-a2
@@ -589,8 +586,7 @@ define Device/hilink_hlk-rm04
   SOC := rt5350
   IMAGE_SIZE := 3776k
   IMAGES += factory.bin
-  IMAGE/factory.bin := $$(sysupgrade_bin) | check-size | \
-	hilink-header
+  IMAGE/factory.bin := $$(sysupgrade_bin) | check-size | hilink-header
   DEVICE_VENDOR := Hi-Link
   DEVICE_MODEL := HLK-RM04
   SUPPORTED_DEVICES += hlk-rm04
@@ -605,6 +601,7 @@ define Device/hootoo_ht-tm02
   DEVICE_MODEL := HT-TM02
   DEVICE_PACKAGES := kmod-usb-ohci kmod-usb2 kmod-usb-ledtrig-usbport
   SUPPORTED_DEVICES += ht-tm02
+  DEFAULT := n
 endef
 TARGET_DEVICES += hootoo_ht-tm02
 
@@ -634,8 +631,8 @@ define Device/intenso_memory2move
   UIMAGE_NAME:= Linux Kernel Image
   DEVICE_VENDOR := Intenso
   DEVICE_MODEL := Memory 2 Move
-  DEVICE_PACKAGES := kmod-ledtrig-netdev kmod-ledtrig-timer kmod-usb2 \
-	kmod-usb-storage kmod-scsi-core kmod-fs-ext4 kmod-fs-vfat block-mount
+  DEVICE_PACKAGES := kmod-usb2 kmod-usb-storage kmod-scsi-core kmod-fs-ext4 \
+	kmod-fs-vfat block-mount
   SUPPORTED_DEVICES += m2m
 endef
 TARGET_DEVICES += intenso_memory2move
@@ -644,8 +641,7 @@ define Device/jcg_jhr-n805r
   SOC := rt3050
   IMAGE_SIZE := 3776k
   IMAGES += factory.bin
-  IMAGE/factory.bin := $$(sysupgrade_bin) | check-size | \
-	jcg-header 29.24
+  IMAGE/factory.bin := $$(sysupgrade_bin) | check-size | jcg-header 29.24
   DEVICE_VENDOR := JCG
   DEVICE_MODEL := JHR-N805R
   SUPPORTED_DEVICES += jhr-n805r
@@ -657,8 +653,7 @@ define Device/jcg_jhr-n825r
   SOC := rt3052
   IMAGE_SIZE := 3776k
   IMAGES += factory.bin
-  IMAGE/factory.bin := $$(sysupgrade_bin) | check-size | \
-	jcg-header 23.24
+  IMAGE/factory.bin := $$(sysupgrade_bin) | check-size | jcg-header 23.24
   DEVICE_VENDOR := JCG
   DEVICE_MODEL := JHR-N825R
   SUPPORTED_DEVICES += jhr-n825r
@@ -670,8 +665,7 @@ define Device/jcg_jhr-n926r
   SOC := rt3052
   IMAGE_SIZE := 3776k
   IMAGES += factory.bin
-  IMAGE/factory.bin := $$(sysupgrade_bin) | check-size | \
-	jcg-header 25.24
+  IMAGE/factory.bin := $$(sysupgrade_bin) | check-size | jcg-header 25.24
   DEVICE_VENDOR := JCG
   DEVICE_MODEL := JHR-N926R
   SUPPORTED_DEVICES += jhr-n926r
@@ -756,8 +750,7 @@ define Device/nixcore_x1-16m
   DEVICE_VENDOR := Nixcore
   DEVICE_MODEL := X1
   DEVICE_VARIANT := 16M
-  DEVICE_PACKAGES := kmod-usb-ohci kmod-usb2 kmod-i2c-ralink \
-	kmod-spi-dev
+  DEVICE_PACKAGES := kmod-usb-ohci kmod-usb2 kmod-i2c-ralink kmod-spi-dev
   SUPPORTED_DEVICES += nixcore-x1 nixcore-x1-16M
 endef
 TARGET_DEVICES += nixcore_x1-16m
@@ -768,30 +761,29 @@ define Device/nixcore_x1-8m
   DEVICE_VENDOR := Nixcore
   DEVICE_MODEL := X1
   DEVICE_VARIANT := 8M
-  DEVICE_PACKAGES := kmod-usb-ohci kmod-usb2 kmod-i2c-ralink \
-	kmod-spi-dev
+  DEVICE_PACKAGES := kmod-usb-ohci kmod-usb2 kmod-i2c-ralink kmod-spi-dev
   SUPPORTED_DEVICES += nixcore-x1 nixcore-x1-8M
 endef
 TARGET_DEVICES += nixcore_x1-8m
 
 define Device/olimex_rt5350f-olinuxino
+  $(Device/uimage-lzma-loader)
   SOC := rt5350
   IMAGE_SIZE := 7872k
   DEVICE_VENDOR := OLIMEX
   DEVICE_MODEL := RT5350F-OLinuXino
-  DEVICE_PACKAGES := kmod-usb-ohci kmod-usb2 kmod-i2c-ralink \
-	kmod-spi-dev
+  DEVICE_PACKAGES := kmod-usb-ohci kmod-usb2 kmod-i2c-ralink kmod-spi-dev
   SUPPORTED_DEVICES += rt5350f-olinuxino
 endef
 TARGET_DEVICES += olimex_rt5350f-olinuxino
 
 define Device/olimex_rt5350f-olinuxino-evb
+  $(Device/uimage-lzma-loader)
   SOC := rt5350
   IMAGE_SIZE := 7872k
   DEVICE_VENDOR := OLIMEX
   DEVICE_MODEL := RT5350F-OLinuXino-EVB
-  DEVICE_PACKAGES := kmod-usb-ohci kmod-usb2 kmod-i2c-ralink \
-	kmod-spi-dev
+  DEVICE_PACKAGES := kmod-usb-ohci kmod-usb2 kmod-i2c-ralink kmod-spi-dev
   SUPPORTED_DEVICES += rt5350f-olinuxino-evb
 endef
 TARGET_DEVICES += olimex_rt5350f-olinuxino-evb
@@ -876,7 +868,7 @@ define Device/poray_m3
 	poray-header -B M3 -F 4M
   DEVICE_VENDOR := Poray
   DEVICE_MODEL := M3
-  DEVICE_PACKAGES := kmod-usb2 kmod-ledtrig-netdev kmod-ledtrig-timer
+  DEVICE_PACKAGES := kmod-usb2
   SUPPORTED_DEVICES += m3
   DEFAULT := n
 endef
@@ -891,7 +883,7 @@ define Device/poray_m4-4m
   DEVICE_VENDOR := Poray
   DEVICE_MODEL := M4
   DEVICE_VARIANT := 4M
-  DEVICE_PACKAGES := kmod-usb2 kmod-ledtrig-netdev kmod-ledtrig-timer
+  DEVICE_PACKAGES := kmod-usb2
   SUPPORTED_DEVICES += m4-4M
   DEFAULT := n
 endef
@@ -906,7 +898,7 @@ define Device/poray_m4-8m
   DEVICE_VENDOR := Poray
   DEVICE_MODEL := M4
   DEVICE_VARIANT := 8M
-  DEVICE_PACKAGES := kmod-usb2 kmod-ledtrig-netdev kmod-ledtrig-timer
+  DEVICE_PACKAGES := kmod-usb2
   SUPPORTED_DEVICES += m4-8M
 endef
 TARGET_DEVICES += poray_m4-8m
@@ -919,7 +911,7 @@ define Device/poray_x5
 	poray-header -B X5 -F 8M
   DEVICE_VENDOR := Poray
   DEVICE_MODEL := X5/X6
-  DEVICE_PACKAGES := kmod-usb2 kmod-ledtrig-netdev kmod-ledtrig-timer
+  DEVICE_PACKAGES := kmod-usb2
   SUPPORTED_DEVICES += x5
 endef
 TARGET_DEVICES += poray_x5
@@ -932,7 +924,7 @@ define Device/poray_x8
 	poray-header -B X8 -F 8M
   DEVICE_VENDOR := Poray
   DEVICE_MODEL := X8
-  DEVICE_PACKAGES := kmod-usb2 kmod-ledtrig-netdev kmod-ledtrig-timer
+  DEVICE_PACKAGES := kmod-usb2
   SUPPORTED_DEVICES += x8
 endef
 TARGET_DEVICES += poray_x8
@@ -964,7 +956,7 @@ define Device/sitecom_wl-351
   IMAGE_SIZE := 3776k
   DEVICE_VENDOR := Sitecom
   DEVICE_MODEL := WL-351 v1
-  DEVICE_PACKAGES := kmod-switch-rtl8366rb kmod-swconfig swconfig
+  DEVICE_PACKAGES := kmod-switch-rtl8366rb
   SUPPORTED_DEVICES += wl-351
   DEFAULT := n
 endef
@@ -1079,7 +1071,7 @@ define Device/unbranded_a5-v11
   IMAGES += factory.bin
   IMAGE/factory.bin := $$(sysupgrade_bin) | check-size | \
 	poray-header -B A5-V11 -F 4M
-  DEVICE_VENDOR := 
+  DEVICE_VENDOR :=
   DEVICE_MODEL := A5-V11
   DEVICE_PACKAGES := kmod-usb-ohci kmod-usb2
   SUPPORTED_DEVICES += a5-v11
@@ -1147,8 +1139,7 @@ define Device/vocore_vocore-16m
   DEVICE_VENDOR := VoCore
   DEVICE_MODEL := VoCore
   DEVICE_VARIANT := 16M
-  DEVICE_PACKAGES := kmod-usb-ohci kmod-usb2 kmod-i2c-ralink \
-	kmod-spi-dev
+  DEVICE_PACKAGES := kmod-usb-ohci kmod-usb2 kmod-i2c-ralink kmod-spi-dev
   SUPPORTED_DEVICES += vocore vocore-16M
 endef
 TARGET_DEVICES += vocore_vocore-16m
@@ -1159,8 +1150,7 @@ define Device/vocore_vocore-8m
   DEVICE_VENDOR := VoCore
   DEVICE_MODEL := VoCore
   DEVICE_VARIANT := 8M
-  DEVICE_PACKAGES := kmod-usb-ohci kmod-usb2 kmod-i2c-ralink \
-	kmod-spi-dev
+  DEVICE_PACKAGES := kmod-usb-ohci kmod-usb2 kmod-i2c-ralink kmod-spi-dev
   SUPPORTED_DEVICES += vocore vocore-8M
 endef
 TARGET_DEVICES += vocore_vocore-8m
@@ -1189,9 +1179,20 @@ define Device/zorlik_zl5900v2
   IMAGE_SIZE := 7872k
   DEVICE_VENDOR := Zorlik
   DEVICE_MODEL := ZL5900V2
-  DEVICE_PACKAGES := kmod-usb-ohci kmod-usb2 kmod-ledtrig-netdev
+  DEVICE_PACKAGES := kmod-usb-ohci kmod-usb2
 endef
 TARGET_DEVICES += zorlik_zl5900v2
+
+define Device/zte_mf283plus
+  $(Device/uimage-lzma-loader)
+  SOC := rt3352
+  IMAGE_SIZE := 15872k
+  DEVICE_VENDOR := ZTE
+  DEVICE_MODEL := MF283+
+  DEVICE_PACKAGES := kmod-usb-ohci kmod-usb2 kmod-usb-net-qmi-wwan uqmi \
+	kmod-usb-serial kmod-usb-serial-option
+endef
+TARGET_DEVICES += zte_mf283plus
 
 define Device/zyxel_keenetic
   SOC := rt3052
@@ -1199,10 +1200,21 @@ define Device/zyxel_keenetic
   IMAGE_SIZE := 7872k
   DEVICE_VENDOR := ZyXEL
   DEVICE_MODEL := Keenetic
-  DEVICE_PACKAGES := kmod-usb2 kmod-usb-ehci kmod-usb-ledtrig-usbport
+  DEVICE_PACKAGES := kmod-usb2 kmod-usb-ehci kmod-usb-ledtrig-usbport \
+	kmod-usb-dwc2
   SUPPORTED_DEVICES += kn
 endef
 TARGET_DEVICES += zyxel_keenetic
+
+define Device/zyxel_keenetic-lite-b
+  $(Device/uimage-lzma-loader)
+  SOC := rt5350
+  IMAGE_SIZE := 7872k
+  DEVICE_VENDOR := ZyXEL
+  DEVICE_MODEL := Keenetic Lite
+  DEVICE_VARIANT := B
+endef
+TARGET_DEVICES += zyxel_keenetic-lite-b
 
 define Device/zyxel_keenetic-start
   SOC := rt5350

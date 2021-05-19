@@ -1,5 +1,3 @@
-/dts-v1/;
-
 #include "bcm6328.dtsi"
 
 #include <dt-bindings/input/input.h>
@@ -7,6 +5,13 @@
 / {
 	model = "D-Link DSL-2740B/DSL-2741B rev F1";
 	compatible = "d-link,dsl-274xb-f1", "brcm,bcm6328";
+
+	aliases {
+		led-boot = &led_power_green;
+		led-failsafe = &led_power_green;
+		led-running = &led_power_green;
+		led-upgrade = &led_power_green;
+	};
 
 	chosen {
 		bootargs = "rootfstype=squashfs,jffs2 noinitrd console=ttyS0,115200";
@@ -45,35 +50,35 @@
 		compatible = "gpio-leds";
 
 		inet_red {
-			label = "dsl-274xb:red:internet";
+			label = "red:internet";
 			gpios = <&pinctrl 2 1>;
 		};
 		dsl_green {
-			label = "dsl-274xb:green:dsl";
+			label = "green:dsl";
 			gpios = <&pinctrl 3 1>;
 		};
-		power_green {
-			label = "dsl-274xb:green:power";
+		led_power_green: power_green {
+			label = "green:power";
 			gpios = <&pinctrl 4 1>;
 			default-state = "on";
 		};
 		power_red {
-			label = "dsl-274xb:red:power";
+			label = "red:power";
 			gpios = <&pinctrl 8 1>;
 		};
 		wps_blue {
-			label = "dsl-274xb:blue:wps";
+			label = "blue:wps";
 			gpios = <&pinctrl 9 1>;
 		};
 		inet_green {
-			label = "dsl-274xb:green:internet";
+			label = "green:internet";
 			gpios = <&pinctrl 11 1>;
 		};
 	};
 };
 
 &hsspi {
-	status = "ok";
+	status = "okay";
 
 	flash@0 {
 		compatible = "jedec,spi-nor";
@@ -117,5 +122,5 @@
 };
 
 &uart0 {
-	status = "ok";
+	status = "okay";
 };

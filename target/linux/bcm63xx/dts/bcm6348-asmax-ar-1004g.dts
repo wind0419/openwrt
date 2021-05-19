@@ -1,5 +1,3 @@
-/dts-v1/;
-
 #include "bcm6348.dtsi"
 
 #include <dt-bindings/input/input.h>
@@ -7,6 +5,13 @@
 / {
 	model = "ASMAX AR 1004g";
 	compatible = "asmax,ar-1004g", "brcm,bcm6348";
+
+	aliases {
+		led-boot = &led_power_green;
+		led-failsafe = &led_power_green;
+		led-running = &led_power_green;
+		led-upgrade = &led_power_green;
+	};
 
 	chosen {
 		bootargs = "rootfstype=squashfs,jffs2 noinitrd console=ttyS0,115200";
@@ -30,24 +35,24 @@
 	leds {
 		compatible = "gpio-leds";
 
-		power_green {
-			label = "AR1004G:green:power";
+		led_power_green: power_green {
+			label = "green:power";
 			gpios = <&pinctrl 0 1>;
 			default-state = "on";
 		};
 		inet_green {
-			label = "AR1004G:green:inet";
+			label = "green:inet";
 			gpios = <&pinctrl 3 1>;
 		};
 		power_red {
-			label = "AR1004G:red:power";
+			label = "red:power";
 			gpios = <&pinctrl 6 1>;
 		};
 	};
 };
 
 &pflash {
-	status = "ok";
+	status = "okay";
 
 	partitions {
 		compatible = "fixed-partitions";
@@ -79,5 +84,5 @@
 };
 
 &uart0 {
-	status = "ok";
+	status = "okay";
 };

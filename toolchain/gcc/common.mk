@@ -28,10 +28,6 @@ GCC_DIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_URL:=@GNU/gcc/gcc-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 
-ifeq ($(PKG_VERSION),5.5.0)
-  PKG_HASH:=530cea139d82fe542b358961130c69cfde8b3d14556370b65823d2f91f0ced87
-endif
-
 ifeq ($(PKG_VERSION),7.5.0)
   PKG_HASH:=b81946e7f01f90528a1f7352ab08cc602b9ccc05d4e44da4bd501c5a189ee661
 endif
@@ -42,6 +38,10 @@ endif
 
 ifeq ($(PKG_VERSION),9.3.0)
   PKG_HASH:=71e197867611f6054aa1119b13a0c0abac12834765fe2d81f35ac57f84f742d1
+endif
+
+ifeq ($(PKG_VERSION),10.3.0)
+  PKG_HASH:=64f404c1a650f27fc33da242e1f2df54952e3963a49e06e73f6940f3223ac344
 endif
 
 PATCH_DIR=../patches/$(GCC_VERSION)
@@ -104,6 +104,7 @@ GCC_CONFIGURE:= \
 		--disable-multilib \
 		--disable-libmpx \
 		--disable-nls \
+		--disable-libssp \
 		$(GRAPHITE_CONFIGURE) \
 		--with-host-libstdcxx=-lstdc++ \
 		$(SOFT_FLOAT_CONFIG_OPTION) \
@@ -115,7 +116,10 @@ GCC_CONFIGURE:= \
 		--with-mpfr=$(TOPDIR)/staging_dir/host \
 		--with-mpc=$(TOPDIR)/staging_dir/host \
 		--disable-decimal-float \
-		--with-diagnostics-color=auto-if-env
+		--with-diagnostics-color=auto-if-env \
+		--enable-__cxa_atexit \
+		--disable-libstdcxx-dual-abi \
+		--with-default-libstdcxx-abi=new
 ifneq ($(CONFIG_mips)$(CONFIG_mipsel),)
   GCC_CONFIGURE += --with-mips-plt
 endif
@@ -130,14 +134,6 @@ ifneq ($(CONFIG_GCC_DEFAULT_SSP),)
 		--enable-default-ssp
 endif
 
-ifneq ($(CONFIG_GCC_LIBSSP),)
-  GCC_CONFIGURE+= \
-		--enable-libssp
-else
-  GCC_CONFIGURE+= \
-		--disable-libssp
-endif
-
 ifneq ($(CONFIG_EXTRA_TARGET_ARCH),)
   GCC_CONFIGURE+= \
 		--enable-biarch \
@@ -148,14 +144,6 @@ ifdef CONFIG_sparc
   GCC_CONFIGURE+= \
 		--enable-targets=all \
 		--with-long-double-128
-endif
-
-ifeq ($(LIBC),uClibc)
-  GCC_CONFIGURE+= \
-		--disable-__cxa_atexit
-else
-  GCC_CONFIGURE+= \
-		--enable-__cxa_atexit
 endif
 
 ifneq ($(GCC_ARCH),)

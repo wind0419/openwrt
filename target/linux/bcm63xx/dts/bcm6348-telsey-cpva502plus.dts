@@ -1,5 +1,3 @@
-/dts-v1/;
-
 #include "bcm6348.dtsi"
 
 #include <dt-bindings/input/input.h>
@@ -31,19 +29,19 @@
 		compatible = "gpio-leds";
 
 		phone_green {
-			label = "CPVA502+:green:phone";
+			label = "green:phone";
 			gpios = <&pinctrl 0 1>;
 		};
 
 		link_amber {
-			label = "CPVA502+:amber:link";
+			label = "amber:link";
 			gpios = <&pinctrl 5 1>;
 		};
 	};
 };
 
 &pflash {
-	status = "ok";
+	status = "okay";
 
 	partitions {
 		compatible = "fixed-partitions";
@@ -75,5 +73,5 @@
 };
 
 &uart0 {
-	status = "ok";
+	status = "okay";
 };

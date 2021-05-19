@@ -1,5 +1,3 @@
-/dts-v1/;
-
 #include "mt7621.dtsi"
 
 #include <dt-bindings/gpio/gpio.h>
@@ -13,12 +11,6 @@
 		bootargs = "console=ttyS0,115200";
 	};
 
-	palmbus: palmbus@1E000000 {
-		i2c@900 {
-			status = "okay";
-		};
-	};
-
 	keys {
 		compatible = "gpio-keys";
 
@@ -30,6 +22,10 @@
 	};
 };
 
+&i2c {
+	status = "okay";
+};
+
 &sdhci {
 	status = "okay";
 };
@@ -37,7 +33,7 @@
 &spi0 {
 	status = "okay";
 
-	m25p80@0 {
+	flash@0 {
 		compatible = "jedec,spi-nor";
 		reg = <0>;
 		spi-max-frequency = <10000000>;

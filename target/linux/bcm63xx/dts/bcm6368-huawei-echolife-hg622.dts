@@ -1,5 +1,3 @@
-/dts-v1/;
-
 #include "bcm6368.dtsi"
 
 #include <dt-bindings/input/input.h>
@@ -32,19 +30,19 @@
 		compatible = "gpio-leds";
 
 		dsl_green {
-			label = "HG622:green:dsl";
+			label = "green:dsl";
 			gpios = <&pinctrl 2 1>;
 		};
 		inet_green {
-			label = "HG622:green:inet";
+			label = "green:inet";
 			gpios = <&pinctrl 5 1>;
 		};
 		usb_green {
-			label = "HG622:green:usb";
+			label = "green:usb";
 			gpios = <&pinctrl 11 1>;
 		};
 		power_green {
-			label = "HG622:green:power";
+			label = "green:power";
 			gpios = <&pinctrl 22 1>;
 			default-state = "on";
 		};
@@ -52,7 +50,7 @@
 };
 
 &pflash {
-	status = "ok";
+	status = "okay";
 
 	partitions {
 		compatible = "fixed-partitions";
@@ -86,11 +84,13 @@
 
 &pinctrl {
 	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_pci_gnt0 &pinctrl_pci_req0
+	pinctrl-0 = <&pinctrl_ephy0_led &pinctrl_ephy1_led
+		     &pinctrl_ephy2_led &pinctrl_ephy3_led
+		     &pinctrl_pci_gnt0 &pinctrl_pci_req0
 		     &pinctrl_pci_intb &pinctrl_pci_gnt1
 		     &pinctrl_pci_req1>;
 };
 
 &uart0 {
-	status = "ok";
+	status = "okay";
 };
